@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+	  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script> 
+
+
+var words = '[ ' +
+	'{"hun" : "alma", "en" : "apple"},' +
+'{"hun" : "körte", "en" :  "pear"},' +
+'{"hun" : "citrom", "en" :  "lemon"},' +
+'{"hun" : "banán", "en" :  "banana"}' +
+']';
+
+var myDict = JSON.parse(words);
+var id = 0;
+var stats = {
+  known : 0,
+  notSure : 0,
+  unknown :0
+}
+function pickItemFromDictionary() {
+
+	id = Math.floor((Math.random() * myDict.length));
+  console.log(id)
+  console.log(words)
+  console.log(myDict)
+	return pickWordInHungarian(id);
+}
+
+function pickWordInHungarian(id) {
+  return myDict[id].hun;
+}
+
+function pickWordInEnglish(id) {
+  return myDict[id].en;
+}
+
+$(document).ready(function(){
+  $("#startGame").click(function(){
+    // var div=$("#myFrame");
+    stats.known = 0;
+    stats.notSure = 0;
+    stats.unknown = 0; 
+    $("#startGame").hide();
+    $("#myResult").hide();
+    $("#show").show();
+    $("#myFrame").text(pickItemFromDictionary())
+    $("#myFrame").show();
+    $("#myStats").show();
+  });
+
+  $("#show").click(function(){
+     $("#myFrame").text(pickWordInEnglish(id)) 
+     $("#feedback").show();
+  });
+
+  $("#iKnow").click(function(){
+    stats.known++;
+    $("#feedback").hide();
+
+    $("#show").show();
+    $("#myFrame").text(pickItemFromDictionary())
+    $("#myFrame").show();  
+  });  
+
+  $("#almostKnow").click(function(){
+    stats.notSure++;
+    $("#feedback").hide();
+
+    $("#show").show();
+    $("#myFrame").text(pickItemFromDictionary())
+    $("#myFrame").show();  
+  }); 
+
+  $("#dontKnow").click(function(){
+    stats.unknown++;
+    $("#feedback").hide();
+
+    $("#show").show();
+    $("#myFrame").text(pickItemFromDictionary())
+    $("#myFrame").show();  
+  }); 
+  
+  $("#myStats").click(function(){
+    $("#myFrame").hide();
+    $("#feedback").hide();
+    $("#show").hide();
+    $("#startGame").show();
+    msg = "You knew: " + stats.known  +", You were not sure: " + stats.notSure + ", You didn't know: " + stats.unknown;
+    console.log(msg);
+    $("#myResult").text(msg);
+    $("#myResult").show();
+  });
+ });
+
+
+
+</script> 
+</head>
+<body>
+
+<button id = "startGame">Start Game </button>
+<button id = "show" style="display:none">Show it to me</button>
+
+<div id="feedback" style="display:none">
+<button id = "iKnow"> Tudtam </button>
+<button id = "almostKnow"> Kb tudtam</button>
+<button id = "dontKnow"> Nem tudtam </button>
+</div>
+
+<div style="background:#F7DA65;height:100px;width:200px;position:absolute;display:none;" id = "myFrame">  </div>
+
+<button id = "myStats" style="display:none">Show my result</button>
+
+<div style="display:none;" id = "myResult">  </div>
+
+</body>
+</html>
