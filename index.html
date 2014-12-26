@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
-	  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
+	<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script> 
-
-
 var words = '[ ' +
 	'{"hun" : "alma", "en" : "apple"},' +
 '{"hun" : "körte", "en" :  "pear"},' +
@@ -41,7 +44,6 @@ function pickWordInEnglish(id) {
 
 $(document).ready(function(){
   $("#startGame").click(function(){
-    // var div=$("#myFrame");
     stats.known = 0;
     stats.notSure = 0;
     stats.unknown = 0; 
@@ -89,11 +91,13 @@ $(document).ready(function(){
     $("#myFrame").hide();
     $("#feedback").hide();
     $("#show").hide();
+    $("#myStats").hide();
     $("#startGame").show();
     msg = "You knew: " + stats.known  +", You were not sure: " + stats.notSure + ", You didn't know: " + stats.unknown;
     console.log(msg);
     $("#myResult").text(msg);
     $("#myResult").show();
+
   });
  });
 
@@ -102,21 +106,41 @@ $(document).ready(function(){
 </script> 
 </head>
 <body>
-
-<button id = "startGame">Start Game </button>
-<button id = "show" style="display:none">Show it to me</button>
-
-<div id="feedback" style="display:none">
-<button id = "iKnow"> Tudtam </button>
-<button id = "almostKnow"> Kb tudtam</button>
-<button id = "dontKnow"> Nem tudtam </button>
+  <div class="container">
+  <div class="page-header">
+    <h1>Julcsi's amazing flashcard game</h1>
+  </div>
 </div>
 
-<div style="background:#F7DA65;height:100px;width:200px;position:absolute;display:none;" id = "myFrame">  </div>
+<button type="button" class="btn btn-default" id = "startGame">Start Game </button>
+<button type="button" class="btn btn-info" id = "show" style="display:none">Show it to me</button>
 
-<button id = "myStats" style="display:none">Show my result</button>
+<div class = "container" id="feedback" style="display:none">
+  <div class="row">
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-success" id = "iKnow"> Tudtam </button>
+    </div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-warning" id = "almostKnow"> Kb tudtam</button>
+    </div>
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-danger" id = "dontKnow"> Nem tudtam </button>
+    </div>
+  </div>
+</div>
 
-<div style="display:none;" id = "myResult">  </div>
+
+
+<div class = "container">
+    <div class="jumbotron" style="display:none;" align="center" id = "myFrame">
+    </div>
+   </div>
+</div>
+<button type="button" class="btn btn-info" id = "myStats" style="display:none">Show my result</button>
+
+<div class = "container">
+  <p style="display:none;" id = "myResult" class="bg-info">  </p>
+</div>
 
 </body>
 </html>
