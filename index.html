@@ -93,11 +93,14 @@ $(document).ready(function(){
     $("#show").hide();
     $("#myStats").hide();
     $("#startGame").show();
-    msg = "You knew: " + stats.known  +", You were not sure: " + stats.notSure + ", You didn't know: " + stats.unknown;
-    console.log(msg);
-    $("#myResult").text(msg);
+    htmlSrc = '<ul class="list-group">' +
+  '<li class="list-group-item list-group-item-success"><span class="badge">' + stats.known  +'</span> You knew</li>' +
+  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ stats.notSure +'</span> You were not sure</li> '+
+  '<li class="list-group-item list-group-item-danger"><span class="badge">' + stats.unknown +'</span> You didn\'t know </li> ' +
+'</ul>'
+    console.log(htmlSrc);
+    $("#myResult").html(htmlSrc);
     $("#myResult").show();
-
   });
  });
 
@@ -112,24 +115,16 @@ $(document).ready(function(){
   </div>
 </div>
 
-<button type="button" class="btn btn-default" id = "startGame">Start Game </button>
+<button type="button" class="btn btn-default btn-lg btn-block" id = "startGame">Start Game </button>
 <button type="button" class="btn btn-info" id = "show" style="display:none">Show it to me</button>
 
 <div class = "container" id="feedback" style="display:none">
-  <div class="row">
-    <div class="col-sm-4">
+<div class="btn-group">
       <button type="button" class="btn btn-success" id = "iKnow"> Tudtam </button>
-    </div>
-    <div class="col-sm-4">
       <button type="button" class="btn btn-warning" id = "almostKnow"> Kb tudtam</button>
-    </div>
-    <div class="col-sm-4">
       <button type="button" class="btn btn-danger" id = "dontKnow"> Nem tudtam </button>
-    </div>
-  </div>
 </div>
-
-
+</div>
 
 <div class = "container">
     <div class="jumbotron" style="display:none;" align="center" id = "myFrame">
@@ -139,8 +134,15 @@ $(document).ready(function(){
 <button type="button" class="btn btn-info" id = "myStats" style="display:none">Show my result</button>
 
 <div class = "container">
-  <p style="display:none;" id = "myResult" class="bg-info">  </p>
+  <p style="display:none;" id = "myResult" class="bg-info"></p>
 </div>
+
+<!-- <div class="container">
+  <h2>Badges</h2>
+  <a href="#">News <span class="badge">5</span></a><br>
+  <a href="#">Comments <span class="badge">10</span></a><br>
+  <a href="#">Updates <span class="badge">2</span></a>
+</div> -->
 
 </body>
 </html>
