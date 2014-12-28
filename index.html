@@ -106,39 +106,57 @@ $(document).ready(function(){
 </head>
 <body>
   <div class="container">
-  <div class="page-header">
-    <h1>Julcsi's amazing flashcard game</h1>
-  </div>
-</div>
-
-<button type="button" class="btn btn-default btn-lg btn-block" id = "startGame">Start Game </button>
-<button type="button" class="btn btn-info" id = "show" style="display:none">Show it to me</button>
-
-<div class = "container" id="feedback" style="display:none">
-<div class="btn-group btn-group-justified" role="group">
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-success" id = "iKnow"> Tudtam </button>
-  </div>
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-warning" id = "almostKnow"> Kb tudtam</button>
-  </div>
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-danger" id = "dontKnow"> Nem tudtam </button>
-  </div>
-</div>
-</div>
-
-<div class = "container">
-    <div class="jumbotron" style="display:none;" align="center" id = "myFrame">
+    <div class="page-header">
+      <h1>Julcsi's amazing flashcard game</h1>
     </div>
-   </div>
-</div>
+  </div>
 
-<button type="button" class="btn btn-info" id = "myStats" style="display:none">Show my result</button>
+  <div class = "container">
+    <div class="btn-group btn-group-justified" role="group">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default btn-lg btn-block" id = "startGame">Start Game </button>
+      </div>
+    </div>
+  </div>
 
-<div class = "container">
-  <p style="display:none;" id = "myResult" class="bg-info"></p>
-</div>
+  <div class = "container">
+    <div class="btn-group btn-group-justified" role="group">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-info" id = "show" style="display:none">Show it to me</button>
+      </div>
+    </div>
+  </div>
+
+  <div class = "container" id="feedback" style="display:none">
+    <div class="btn-group btn-group-justified" role="group">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-success" id = "iKnow"> Tudtam </button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-warning" id = "almostKnow"> Kb tudtam</button>
+      </div>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-danger" id = "dontKnow"> Nem tudtam </button>
+      </div>
+    </div>
+  </div>
+
+  <div class = "container">
+      <div class="jumbotron" style="display:none;" align="center" id = "myFrame">
+      </div>
+  </div>
+
+  <div class = "container">
+    <div class="btn-group btn-group-justified" role="group">
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-info" id = "myStats" style="display:none">Show my result</button>
+      </div>
+    </div>
+  </div>
+
+  <div class = "container">
+    <p style="display:none;" id = "myResult" class="bg-info"></p>
+  </div>
 
 </body>
 </html>
