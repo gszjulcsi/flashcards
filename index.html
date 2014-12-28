@@ -10,14 +10,9 @@
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script> 
-var words = '[ ' +
-	'{"hun" : "alma", "en" : "apple"},' +
-'{"hun" : "körte", "en" :  "pear"},' +
-'{"hun" : "citrom", "en" :  "lemon"},' +
-'{"hun" : "banán", "en" :  "banana"}' +
-']';
 
-var myDict = JSON.parse(words);
+
+var myDict = {};
 var id = 0;
 var stats = {
   known : 0,
@@ -28,7 +23,6 @@ function pickItemFromDictionary() {
 
 	id = Math.floor((Math.random() * myDict.length));
   console.log(id)
-  console.log(words)
   console.log(myDict)
 	return pickWordInHungarian(id);
 }
@@ -43,15 +37,18 @@ function pickWordInEnglish(id) {
 
 $(document).ready(function(){
   $("#startGame").click(function(){
-    stats.known = 0;
-    stats.notSure = 0;
-    stats.unknown = 0; 
-    $("#startGame").hide();
-    $("#myResult").hide();
-    $("#show").show();
-    $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>" )
-    $("#myFrame").show();
-    $("#myStats").show();
+    $.get("data/hun-en.json", function(data, status) {
+      myDict = data
+      stats.known = 0;
+      stats.notSure = 0;
+      stats.unknown = 0; 
+      $("#startGame").hide();
+      $("#myResult").hide();
+      $("#show").show();
+      $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>" )
+      $("#myFrame").show();
+      $("#myStats").show();
+     });
   });
 
   $("#show").click(function(){
