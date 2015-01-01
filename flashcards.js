@@ -5,11 +5,57 @@ var stats = {
   notSure : 0,
   unknown :0
 }
-function pickItemFromDictionary() {
 
+// states:
+// 0: starting a new game
+// 1: showing a card
+// 2: giving feedback
+// 3: showing result, game is pending
+
+function startNewGame() {
+      stats.known = 0;
+      stats.notSure = 0;
+      stats.unknown = 0;
+      showWord();
+}
+
+function showWord() {
+      $("#startGame").hide();
+      $("#myResult").hide();
+      $("#show").show();
+      $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>")
+      $("#myFrame").show();
+      $("#myStats").show();
+      $("#myResult").hide();
+      $("#feedback").hide();
+      $("#restartOrContinue").hide();
+}
+
+function showMeaning() {
+     $("#myFrame").html("<h1>" +pickWordInEnglish(id)+"</h1>")
+     $("#feedback").show();
+     $("#show").show();
+     $("#myFrame").show();
+}
+
+function showResult(){
+    $("#myFrame").hide();
+    $("#feedback").hide();
+    $("#show").hide();
+    $("#myStats").hide();
+    $("#startGame").hide();
+    htmlSrc = '<ul class="list-group">' +
+  '<li class="list-group-item list-group-item-success"><span class="badge">' + stats.known  +'</span> You knew</li>' +
+  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ stats.notSure +'</span> You were not sure</li> '+
+  '<li class="list-group-item list-group-item-danger"><span class="badge">' + stats.unknown +'</span> You didn\'t know </li> ' +
+'</ul>'
+    $("#myResult").html(htmlSrc);
+    $("#myResult").show();
+    $("#restartOrContinue").show();
+}
+
+function pickItemFromDictionary() {
 	id = Math.floor((Math.random() * myDict.length));
-  console.log(id)
-  console.log(myDict)
 	return pickWordInHungarian(id);
 }
 
@@ -24,65 +70,39 @@ function pickWordInEnglish(id) {
 $(document).ready(function(){
   $("#startGame").click(function(){
     $.get("data/hun-en.json", function(data, status) {
-      myDict = data
-      stats.known = 0;
-      stats.notSure = 0;
-      stats.unknown = 0; 
-      $("#startGame").hide();
-      $("#myResult").hide();
-      $("#show").show();
-      $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>" )
-      $("#myFrame").show();
-      $("#myStats").show();
+      myDict = data;
+      startNewGame();
      });
   });
 
   $("#show").click(function(){
-     $("#myFrame").html("<h1>" +pickWordInEnglish(id)+"</h1>" ) 
-     $("#feedback").show();
-     $("#show").hide();
+    showMeaning();
   });
 
   $("#iKnow").click(function(){
     stats.known++;
-    $("#feedback").hide();
-
-    $("#show").show();
-    $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>")
-    $("#myFrame").show();  
+    showWord();
   });  
 
   $("#almostKnow").click(function(){
     stats.notSure++;
-    $("#feedback").hide();
-
-    $("#show").show();
-    $("#myFrame").html("<h1>" + pickItemFromDictionary()+"</h1>")
-    $("#myFrame").show();  
+    showWord();
   }); 
 
   $("#dontKnow").click(function(){
     stats.unknown++;
-    $("#feedback").hide();
-
-    $("#show").show();
-    $("#myFrame").html("<h1>" + pickItemFromDictionary()+"</h1>")
-    $("#myFrame").show();  
+    showWord();
   }); 
   
   $("#myStats").click(function(){
-    $("#myFrame").hide();
-    $("#feedback").hide();
-    $("#show").hide();
-    $("#myStats").hide();
-    $("#startGame").show();
-    htmlSrc = '<ul class="list-group">' +
-  '<li class="list-group-item list-group-item-success"><span class="badge">' + stats.known  +'</span> You knew</li>' +
-  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ stats.notSure +'</span> You were not sure</li> '+
-  '<li class="list-group-item list-group-item-danger"><span class="badge">' + stats.unknown +'</span> You didn\'t know </li> ' +
-'</ul>'
-    console.log(htmlSrc);
-    $("#myResult").html(htmlSrc);
-    $("#myResult").show();
+    showResult();
   });
+
+  $("#restart").click(function(){
+    startNewGame();
+  });
+  $("#backToGame").click(function(){
+    showWord();
+  });
+
  });
