@@ -20,38 +20,27 @@ function startNewGame() {
 }
 
 function showWord() {
-      $("#startGame").hide();
-      $("#myResult").hide();
-      $("#show").show();
       $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>")
-      $("#myFrame").show();
-      $("#myStats").show();
-      $("#myResult").hide();
-      $("#feedback").hide();
-      $("#restartOrContinue").hide();
+      $("#startGame, #myResult, #myResult, #feedback, #restartOrContinue").hide();
+      $("#show, #myFrame, #myStats").show();
 }
 
 function showMeaning() {
      $("#myFrame").html("<h1>" +pickWordInEnglish(id)+"</h1>")
-     $("#feedback").show();
-     $("#show").show();
-     $("#myFrame").show();
+     $("#feedback, #myFrame").show();
+     $("#show").hide();
 }
 
-function showResult(){
-    $("#myFrame").hide();
-    $("#feedback").hide();
-    $("#show").hide();
-    $("#myStats").hide();
-    $("#startGame").hide();
+function showResult() {
+    $("#myFrame, #feedback, #show, #myStats, #startGame").hide();
+
     htmlSrc = '<ul class="list-group">' +
   '<li class="list-group-item list-group-item-success"><span class="badge">' + stats.known  +'</span> You knew</li>' +
   '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ stats.notSure +'</span> You were not sure</li> '+
   '<li class="list-group-item list-group-item-danger"><span class="badge">' + stats.unknown +'</span> You didn\'t know </li> ' +
 '</ul>'
     $("#myResult").html(htmlSrc);
-    $("#myResult").show();
-    $("#restartOrContinue").show();
+    $("#myResult, #restartOrContinue").show();
 }
 
 function pickItemFromDictionary() {
@@ -75,9 +64,7 @@ $(document).ready(function(){
      });
   });
 
-  $("#show").click(function(){
-    showMeaning();
-  });
+  $("#show").click(showMeaning);
 
   $("#iKnow").click(function(){
     stats.known++;
@@ -94,15 +81,10 @@ $(document).ready(function(){
     showWord();
   }); 
   
-  $("#myStats").click(function(){
-    showResult();
-  });
+  $("#myStats").click(showResult);
 
-  $("#restart").click(function(){
-    startNewGame();
-  });
-  $("#backToGame").click(function(){
-    showWord();
-  });
+  $("#restart").click(startNewGame);
+
+  $("#backToGame").click(showWord);
 
  });
