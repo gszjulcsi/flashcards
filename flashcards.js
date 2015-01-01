@@ -1,10 +1,11 @@
 var myDict = {};
 var id = 0;
-var stats = {
-  known : 0,
-  notSure : 0,
-  unknown :0
-}
+
+var initialState = "ititial_state";
+var showingWordState = "show_word_state";
+var showingMeaningState = "show_meaning_state";
+var showingResultState = "show_result_state";
+
 
 // states:
 // 0: starting a new game
@@ -13,31 +14,34 @@ var stats = {
 // 3: showing result, game is pending
 
 function startNewGame() {
-      stats.known = 0;
-      stats.notSure = 0;
-      stats.unknown = 0;
-      showWord();
+  localStorage.setItem("statistics_known", "0")
+  localStorage.setItem("statistics_notSure", "0")
+  localStorage.setItem("statistics_unknown", "0")
+  showWord();
 }
 
 function showWord() {
+      localStorage.setItem("current_state", showingWordState);
       $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>")
       $("#startGame, #myResult, #myResult, #feedback, #restartOrContinue").hide();
       $("#show, #myFrame, #myStats").show();
 }
 
 function showMeaning() {
-     $("#myFrame").html("<h1>" +pickWordInEnglish(id)+"</h1>")
-     $("#feedback, #myFrame").show();
-     $("#show").hide();
+      localStorage.setItem("current_state", showingMeaningState);
+      $("#myFrame").html("<h1>" +pickWordInEnglish(id)+"</h1>")
+      $("#feedback, #myFrame").show();
+      $("#show").hide();
 }
 
 function showResult() {
+    localStorage.setItem("current_state", showingResultState);
     $("#myFrame, #feedback, #show, #myStats, #startGame").hide();
 
     htmlSrc = '<ul class="list-group">' +
-  '<li class="list-group-item list-group-item-success"><span class="badge">' + stats.known  +'</span> You knew</li>' +
-  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ stats.notSure +'</span> You were not sure</li> '+
-  '<li class="list-group-item list-group-item-danger"><span class="badge">' + stats.unknown +'</span> You didn\'t know </li> ' +
+  '<li class="list-group-item list-group-item-success"><span class="badge">' + localStorage.getItem("statistics_known") +'</span> You knew</li>' +
+  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ localStorage.getItem("statistics_notSure") +'</span> You were not sure</li> '+
+  '<li class="list-group-item list-group-item-danger"><span class="badge">' + localStorage.getItem("statistics_unknown") +'</span> You didn\'t know </li> ' +
 '</ul>'
     $("#myResult").html(htmlSrc);
     $("#myResult, #restartOrContinue").show();
@@ -56,6 +60,14 @@ function pickWordInEnglish(id) {
   return myDict[id].en;
 }
 
+function increaseCounter(counterName) {
+  newScore = 1;
+  if (localStorage.getItem(counterName)) {
+    newScore = parseInt(localStorage.getItem(counterName)) + 1
+  }
+  localStorage.setItem(counterName, newScore.toString())
+}
+
 $(document).ready(function(){
   $("#startGame").click(function(){
     $.get("data/hun-en.json", function(data, status) {
@@ -67,17 +79,17 @@ $(document).ready(function(){
   $("#show").click(showMeaning);
 
   $("#iKnow").click(function(){
-    stats.known++;
+    increaseCounter("statistics_known")
     showWord();
   });  
 
   $("#almostKnow").click(function(){
-    stats.notSure++;
+    increaseCounter("statistics_notSure")
     showWord();
   }); 
 
   $("#dontKnow").click(function(){
-    stats.unknown++;
+    increaseCounter("statistics_unknown")
     showWord();
   }); 
   
