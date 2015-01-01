@@ -69,6 +69,28 @@ function increaseCounter(counterName) {
 }
 
 $(document).ready(function(){
+  if (localStorage.getItem("current_state")) {
+    $.get("data/hun-en.json", function(data, status) {
+      myDict = data;
+      console.log("status was set: " + localStorage.getItem("current_state"));
+      if (localStorage.getItem("current_state") === initialState) {
+        console.log("setting in initialState");
+      } else if (localStorage.getItem("current_state") === showingWordState) {
+        console.log("showWord will be called");
+        showWord();
+      } else if (localStorage.getItem("current_state") === showingMeaningState) {
+        console.log("showMeaning will be called");
+        showMeaning();
+      } else if (localStorage.getItem("current_state") === showingResultState) {
+        console.log("showResult will be called.");
+        showResult();
+      }
+     });
+  } else {
+    console.log("status was nil.")
+    localStorage.setItem("current_state", initialState)
+  }
+
   $("#startGame").click(function(){
     $.get("data/hun-en.json", function(data, status) {
       myDict = data;
@@ -98,5 +120,4 @@ $(document).ready(function(){
   $("#restart").click(startNewGame);
 
   $("#backToGame").click(showWord);
-
  });
