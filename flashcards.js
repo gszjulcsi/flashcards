@@ -40,6 +40,7 @@ $(document).ready(function(){
   $("#show").click(function(){
      $("#myFrame").html("<h1>" +pickWordInEnglish(id)+"</h1>" ) 
      $("#feedback").show();
+     $("#show").hide();
   });
 
   $("#iKnow").click(function(){
