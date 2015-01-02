@@ -1,5 +1,4 @@
 var myDict = {};
-var id = 0;
 
 var initialState = "ititial_state";
 var showingWordState = "show_word_state";
@@ -22,14 +21,15 @@ function startNewGame() {
 
 function showWord() {
       localStorage.setItem("current_state", showingWordState);
-      $("#myFrame").html("<h1>" + pickItemFromDictionary() +"</h1>")
+      pickItemFromDictionary()
+      $("#myFrame").html("<h1>" + localStorage.getItem("current_word_hun") +"</h1>")
       $("#startGame, #myResult, #myResult, #feedback, #restartOrContinue").hide();
       $("#show, #myFrame, #myStats").show();
 }
 
 function showMeaning() {
       localStorage.setItem("current_state", showingMeaningState);
-      $("#myFrame").html("<h1>" +pickWordInEnglish(id)+"</h1>")
+      $("#myFrame").html("<h1>" + localStorage.getItem("current_word_en") +"</h1>")
       $("#feedback, #myFrame").show();
       $("#show").hide();
 }
@@ -48,17 +48,11 @@ function showResult() {
 }
 
 function pickItemFromDictionary() {
-	id = Math.floor((Math.random() * myDict.length));
-	return pickWordInHungarian(id);
+  id = Math.floor((Math.random() * myDict.length));
+  localStorage.setItem("current_word_hun", myDict[id].hun)
+  localStorage.setItem("current_word_en", myDict[id].en)
 }
 
-function pickWordInHungarian(id) {
-  return myDict[id].hun;
-}
-
-function pickWordInEnglish(id) {
-  return myDict[id].en;
-}
 
 function increaseCounter(counterName) {
   newScore = 1;
@@ -120,4 +114,53 @@ $(document).ready(function(){
   $("#restart").click(startNewGame);
 
   $("#backToGame").click(showWord);
+
+  jQuery(document).bind('keydown', 'w', function(e) {
+    if (localStorage.getItem("current_state") == showingWordState) {
+      showMeaning()
+    }
+    console.log("w was pressed");
+  });
+
+
+  jQuery(document).bind('keydown', 'a', function(e) {
+    if (localStorage.getItem("current_state") == showingMeaningState) {
+      increaseCounter("statistics_known")
+      showWord();
+    }
+    console.log("a was pressed");
+  });
+
+  jQuery(document).bind('keydown', 's', function(e) {
+    if (localStorage.getItem("current_state") == showingMeaningState) {
+      increaseCounter("statistics_notSure")
+      showWord();
+    }
+    console.log("s was pressed");
+  });
+
+  jQuery(document).bind('keydown', 'd', function(e) {
+    if (localStorage.getItem("current_state") == showingMeaningState) {
+      increaseCounter("statistics_unknown")
+      showWord();
+    }
+    console.log("d was pressed");
+  });
+
+  jQuery(document).bind('keydown', 'r', function(e) {
+    showResult();
+    console.log("r was pressed");
+  });
+
+  jQuery(document).bind('keydown', 'b', function(e) {
+    if (localStorage.getItem("current_state") == showingResultState) {
+       showWord();
+    }
+    console.log("b was pressed");
+  });
+
+  jQuery(document).bind('keydown', 'n', function(e) {
+    startNewGame();
+    console.log("n was pressed");
+  });
  });
