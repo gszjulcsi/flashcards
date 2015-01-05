@@ -1,6 +1,6 @@
 var myDict = {};
 
-var initialState = "ititial_state";
+var initialState = "initial_state";
 var showingWordState = "show_word_state";
 var showingMeaningState = "show_meaning_state";
 var showingResultState = "show_result_state";
