@@ -15,6 +15,7 @@ var hideShortcutTableState = "hide"
 // 2: giving feedback
 // 3: showing result, game is pending
 
+
 function startNewGame() {
   localStorage.setItem("statistics_known", "0")
   localStorage.setItem("statistics_notSure", "0")
@@ -75,7 +76,7 @@ function pickItemFromDictionary() {
 function increaseCounter(counterName) {
   newScore = 1;
   if (localStorage.getItem(counterName)) {
-    newScore = parseInt(localStorage.getItem(counterName)) + 1
+    newScore = parseInt(localStorage.getItem(counterName), 10) + 1
   }
   localStorage.setItem(counterName, newScore.toString())
 }
@@ -113,19 +114,18 @@ $(document).ready(function(){
 
   $("#show").click(showMeaning);
 
+  var showWordAndUpdateStats = _.compose(showWord, increaseCounter)
+
   $("#iKnow").click(function(){
-    increaseCounter("statistics_known")
-    showWord();
+    showWordAndUpdateStats("statistics_known");
   });  
 
   $("#almostKnow").click(function(){
-    increaseCounter("statistics_notSure")
-    showWord();
+    showWordAndUpdateStats("statistics_notSure")
   }); 
 
   $("#dontKnow").click(function(){
-    increaseCounter("statistics_unknown")
-    showWord();
+    showWordAndUpdateStats("statistics_unknown")
   }); 
   
   $("#myStats").click(showResult);
@@ -154,24 +154,21 @@ $(document).ready(function(){
 
   jQuery(document).bind('keydown', 'a', function(e) {
     if (localStorage.getItem("current_state") == showingMeaningState) {
-      increaseCounter("statistics_known")
-      showWord();
+      showWordAndUpdateStats("statistics_known")
     }
     console.log("a was pressed");
   });
 
   jQuery(document).bind('keydown', 's', function(e) {
     if (localStorage.getItem("current_state") == showingMeaningState) {
-      increaseCounter("statistics_notSure")
-      showWord();
+      showWordAndUpdateStats("statistics_notSure")
     }
     console.log("s was pressed");
   });
 
   jQuery(document).bind('keydown', 'd', function(e) {
     if (localStorage.getItem("current_state") == showingMeaningState) {
-      increaseCounter("statistics_unknown")
-      showWord();
+      showWordAndUpdateStats("statistics_unknown")
     }
     console.log("d was pressed");
   });
