@@ -1,11 +1,5 @@
 var myDict = {};
 
-var initialState = "initial_state";
-var showingWordState = "show_word_state";
-var showingMeaningState = "show_meaning_state";
-var showingResultState = "show_result_state";
-
-var showingShortcutTable = "show_shortcut_table"
 var showShortcutTableState = "show"
 var hideShortcutTableState = "hide"
 
@@ -15,17 +9,39 @@ var hideShortcutTableState = "hide"
 // 2: giving feedback
 // 3: showing result, game is pending
 
+var localStorageKeys = {
+  statistics : {
+    known: "statistics_known",
+    notSure: "statistics_notSure",
+    unknown: "statistics_unknown"
+  },
+  showingShortcutTable : "show_shortcut_table",
+  currentState : "current_state"
+}
+
+var state = {
+  initial : "initial_state",
+  showingWord : "show_word_state",
+  showingMeaning : "show_meaning_state",
+  showingResult : "show_result_state"
+}
+
+// TODO
+// It's just a single step to create your own wrapper around localStorage with functions like getStatisticsKnown,
+// leading to a nice architecture where you can easily pass in your mock storage implementation during tests later
+// (or your newer better storage implementation that uses a backend service for storing data).
+// If you want to be future-proof, make the API async (with callbacks) :)
 
 function startNewGame() {
-  localStorage.setItem("statistics_known", "0")
-  localStorage.setItem("statistics_notSure", "0")
-  localStorage.setItem("statistics_unknown", "0")
+  localStorage.setItem(localStorageKeys.statistics.known, "0")
+  localStorage.setItem(localStorageKeys.statistics.notSure, "0")
+  localStorage.setItem(localStorageKeys.statistics.unknown, "0")
   showWord();
 }
 
 function keyboardShortcutTableState() {
-  console.log(localStorage.getItem(showingShortcutTable))
-  if (localStorage.getItem(showingShortcutTable) && localStorage.getItem(showingShortcutTable) === showShortcutTableState) {
+  console.log(localStorage.getItem(localStorageKeys.showingShortcutTable))
+  if (localStorage.getItem(localStorageKeys.showingShortcutTable) && localStorage.getItem(localStorageKeys.showingShortcutTable) === showShortcutTableState) {
     $("#hideKeyboardShortcutsButton, #shortcutCheatsheet").show();
     $("#showKeyboardShortcutsButton").hide();
   } else {
@@ -36,7 +52,7 @@ function keyboardShortcutTableState() {
 }
 
 function showWord() {
-      localStorage.setItem("current_state", showingWordState);
+      localStorage.setItem(localStorageKeys.currentState, state.showingWord);
       pickItemFromDictionary()
       $("#myFrame").html("<h1>" + localStorage.getItem("current_word_hun") +"</h1>")
       $("#startGame, #myResult, #myResult, #feedback, #restartOrContinue").hide();
@@ -45,7 +61,7 @@ function showWord() {
 }
 
 function showMeaning() {
-      localStorage.setItem("current_state", showingMeaningState);
+      localStorage.setItem(localStorageKeys.currentState, state.showingMeaning);
       $("#myFrame").html("<h1>" + localStorage.getItem("current_word_en") +"</h1>")
       $("#feedback, #myFrame").show();
       $("#show").hide();
@@ -53,13 +69,13 @@ function showMeaning() {
 }
 
 function showResult() {
-    localStorage.setItem("current_state", showingResultState);
+    localStorage.setItem(localStorageKeys.currentState, state.showingResult);
     $("#myFrame, #feedback, #show, #myStats, #startGame").hide();
 
     htmlSrc = '<ul class="list-group">' +
-  '<li class="list-group-item list-group-item-success"><span class="badge">' + localStorage.getItem("statistics_known") +'</span> You knew</li>' +
-  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ localStorage.getItem("statistics_notSure") +'</span> You were not sure</li> '+
-  '<li class="list-group-item list-group-item-danger"><span class="badge">' + localStorage.getItem("statistics_unknown") +'</span> You didn\'t know </li> ' +
+  '<li class="list-group-item list-group-item-success"><span class="badge">' + localStorage.getItem(localStorageKeys.statistics.known) +'</span> You knew</li>' +
+  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ localStorage.getItem(localStorageKeys.statistics.notSure) +'</span> You were not sure</li> '+
+  '<li class="list-group-item list-group-item-danger"><span class="badge">' + localStorage.getItem(localStorageKeys.statistics.unknown) +'</span> You didn\'t know </li> ' +
 '</ul>'
     $("#myResult").html(htmlSrc);
     $("#myResult, #restartOrContinue").show();
@@ -83,22 +99,22 @@ function increaseCounter(counterName) {
 
 
 var handlers = {};
-handlers[initialState] = function(){};
-handlers[showingWordState] = showWord;
-handlers[showingMeaningState] = showMeaning;
-handlers[showingResultState] = showResult;
+handlers[state.initial] = function(){};
+handlers[state.showingWord] = showWord;
+handlers[state.showingMeaning] = showMeaning;
+handlers[state.showingResult] = showResult;
 
 
 $(document).ready(function(){
-  if (localStorage.getItem("current_state")) {
+  if (localStorage.getItem(localStorageKeys.currentState)) {
     $.get("data/hun-en.json", function(data, status) {
       myDict = data;
-      console.log("status is " + localStorage.getItem("current_state"));
-      handlers[localStorage.getItem("current_state")];
+      console.log("status is " + localStorage.getItem(localStorageKeys.currentState));
+      handlers[localStorage.getItem(localStorageKeys.currentState)];
     });
   } else {
     console.log("status was nil.")
-    localStorage.setItem("current_state", initialState)
+    localStorage.setItem(localStorageKeys.currentState, state.initial)
   }
   keyboardShortcutTableState();
 
@@ -114,15 +130,15 @@ $(document).ready(function(){
   var showWordAndUpdateStats = _.compose(showWord, increaseCounter)
 
   $("#iKnow").click(function(){
-    showWordAndUpdateStats("statistics_known");
+    showWordAndUpdateStats(localStorageKeys.statistics.known);
   });  
 
   $("#almostKnow").click(function(){
-    showWordAndUpdateStats("statistics_notSure")
+    showWordAndUpdateStats(localStorageKeys.statistics.notSure)
   }); 
 
   $("#dontKnow").click(function(){
-    showWordAndUpdateStats("statistics_unknown")
+    showWordAndUpdateStats(localStorageKeys.statistics.unknown)
   }); 
   
   $("#myStats").click(showResult);
@@ -132,17 +148,17 @@ $(document).ready(function(){
   $("#backToGame").click(showWord);
 
   $("#hideKeyboardShortcutsButton").click(function(){
-    localStorage.setItem(showingShortcutTable, hideShortcutTableState);
+    localStorage.setItem(localStorageKeys.showingShortcutTable, hideShortcutTableState);
     keyboardShortcutTableState();
   });
 
   $("#showKeyboardShortcutsButton").click(function(){
-    localStorage.setItem(showingShortcutTable, showShortcutTableState);
+    localStorage.setItem(localStorageKeys.showingShortcutTable, showShortcutTableState);
     keyboardShortcutTableState();
   });
 
   jQuery(document).bind('keydown', 'w', function(e) {
-    if (localStorage.getItem("current_state") == showingWordState) {
+    if (localStorage.getItem(localStorageKeys.currentState) == state.showingWord) {
       showMeaning()
     }
     console.log("w was pressed");
@@ -150,22 +166,22 @@ $(document).ready(function(){
 
 
   jQuery(document).bind('keydown', 'a', function(e) {
-    if (localStorage.getItem("current_state") == showingMeaningState) {
-      showWordAndUpdateStats("statistics_known")
+    if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
+      showWordAndUpdateStats(localStorageKeys.statistics.known)
     }
     console.log("a was pressed");
   });
 
   jQuery(document).bind('keydown', 's', function(e) {
-    if (localStorage.getItem("current_state") == showingMeaningState) {
-      showWordAndUpdateStats("statistics_notSure")
+    if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
+      showWordAndUpdateStats(localStorageKeys.statistics.notSure)
     }
     console.log("s was pressed");
   });
 
   jQuery(document).bind('keydown', 'd', function(e) {
-    if (localStorage.getItem("current_state") == showingMeaningState) {
-      showWordAndUpdateStats("statistics_unknown")
+    if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
+      showWordAndUpdateStats(localStorageKeys.statistics.unknown)
     }
     console.log("d was pressed");
   });
@@ -176,7 +192,7 @@ $(document).ready(function(){
   });
 
   jQuery(document).bind('keydown', 'b', function(e) {
-    if (localStorage.getItem("current_state") == showingResultState) {
+    if (localStorage.getItem(localStorageKeys.currentState) == state.showingResult) {
        showWord();
     }
     console.log("b was pressed");
