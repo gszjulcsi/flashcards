@@ -147,14 +147,16 @@ $(document).ready(function(){
 
   $("#backToGame").click(showWord);
 
-  $("#hideKeyboardShortcutsButton").click(function(){
-    localStorage.setItem(localStorageKeys.showingShortcutTable, hideShortcutTableState);
-    keyboardShortcutTableState();
+  $('#myTab game').click(function (e) {
+    e.preventDefault()
+    console.log("game tab clicked")
+    $(this).tab('show')
   });
 
-  $("#showKeyboardShortcutsButton").click(function(){
-    localStorage.setItem(localStorageKeys.showingShortcutTable, showShortcutTableState);
-    keyboardShortcutTableState();
+  $('#myTab cheatsheet').click(function (e) {
+    e.preventDefault()
+    console.log("cheatsheet tab clicked")
+    $(this).tab('show')
   });
 
   jQuery(document).bind('keydown', 'w', function() {
