@@ -157,49 +157,40 @@ $(document).ready(function(){
     keyboardShortcutTableState();
   });
 
-  jQuery(document).bind('keydown', 'w', function(e) {
+  jQuery(document).bind('keydown', 'w', function() {
     if (localStorage.getItem(localStorageKeys.currentState) == state.showingWord) {
       showMeaning()
     }
-    console.log("w was pressed");
   });
 
 
-  jQuery(document).bind('keydown', 'a', function(e) {
+  jQuery(document).bind('keydown', 'a', function() {
     if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
       showWordAndUpdateStats(localStorageKeys.statistics.known)
     }
-    console.log("a was pressed");
   });
 
-  jQuery(document).bind('keydown', 's', function(e) {
+  jQuery(document).bind('keydown', 's', function() {
     if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
       showWordAndUpdateStats(localStorageKeys.statistics.notSure)
     }
-    console.log("s was pressed");
   });
 
-  jQuery(document).bind('keydown', 'd', function(e) {
+  jQuery(document).bind('keydown', 'd', function() {
     if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
       showWordAndUpdateStats(localStorageKeys.statistics.unknown)
     }
-    console.log("d was pressed");
   });
 
-  jQuery(document).bind('keydown', 'r', function(e) {
-    showResult();
-    console.log("r was pressed");
-  });
+  jQuery(document).bind('keydown', 'r', showResult);
 
-  jQuery(document).bind('keydown', 'b', function(e) {
+  jQuery(document).bind('keydown', 'b', function() {
     if (localStorage.getItem(localStorageKeys.currentState) == state.showingResult) {
        showWord();
     }
-    console.log("b was pressed");
   });
 
   jQuery(document).bind('keydown', 'n', function(e) {
     startNewGame();
-    console.log("n was pressed");
   });
  });
