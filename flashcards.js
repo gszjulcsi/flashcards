@@ -1,8 +1,5 @@
 var myDict = {};
 
-var showShortcutTableState = "show"
-var hideShortcutTableState = "hide"
-
 // states:
 // 0: starting a new game
 // 1: showing a card
@@ -39,25 +36,12 @@ function startNewGame() {
   showWord();
 }
 
-function keyboardShortcutTableState() {
-  console.log(localStorage.getItem(localStorageKeys.showingShortcutTable))
-  if (localStorage.getItem(localStorageKeys.showingShortcutTable) && localStorage.getItem(localStorageKeys.showingShortcutTable) === showShortcutTableState) {
-    $("#hideKeyboardShortcutsButton, #shortcutCheatsheet").show();
-    $("#showKeyboardShortcutsButton").hide();
-  } else {
-    console.log("else branch... hiding cheatshet")
-    $("#hideKeyboardShortcutsButton, #shortcutCheatsheet").hide();
-    $("#showKeyboardShortcutsButton").show();
-  }
-}
-
 function showWord() {
       localStorage.setItem(localStorageKeys.currentState, state.showingWord);
       pickItemFromDictionary()
       $("#myFrame").html("<h1>" + localStorage.getItem("current_word_hun") +"</h1>")
       $("#startGame, #myResult, #myResult, #feedback, #restartOrContinue").hide();
       $("#show, #myFrame, #myStats").show();
-      keyboardShortcutTableState();
 }
 
 function showMeaning() {
@@ -65,7 +49,6 @@ function showMeaning() {
       $("#myFrame").html("<h1>" + localStorage.getItem("current_word_en") +"</h1>")
       $("#feedback, #myFrame").show();
       $("#show").hide();
-      keyboardShortcutTableState();
 }
 
 function showResult() {
@@ -79,7 +62,6 @@ function showResult() {
 '</ul>'
     $("#myResult").html(htmlSrc);
     $("#myResult, #restartOrContinue").show();
-    keyboardShortcutTableState();
 }
 
 function pickItemFromDictionary() {
@@ -116,7 +98,6 @@ $(document).ready(function(){
     console.log("status was nil.")
     localStorage.setItem(localStorageKeys.currentState, state.initial)
   }
-  keyboardShortcutTableState();
 
   $("#startGame").click(function(){
     $.get("data/hun-en.json", function(data, status) {
