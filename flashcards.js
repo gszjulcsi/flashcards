@@ -13,15 +13,68 @@ var localStorageKeys = {
     unknown: "statistics_unknown"
   },
   showingShortcutTable : "show_shortcut_table",
-  currentState : "current_state"
-}
+  currentState : "current_state",
+
+  currentWordPrimaryLanguage : "current_word_hun",
+  currentWordSecondaryLanguage : "current_word_en"
+};
 
 var state = {
   initial : "initial_state",
   showingWord : "show_word_state",
   showingMeaning : "show_meaning_state",
   showingResult : "show_result_state"
-}
+};
+
+var Storage = {
+  get statisticsKnown() {
+    return localStorage.getItem(localStorageKeys.statistics.known);
+  },
+  set statisticsKnown(value) {
+     localStorage.setItem(localStorageKeys.statistics.known, value.toString());
+  },
+
+  get statisticsNotSure()  {
+    return localStorage.getItem(localStorageKeys.statistics.notSure);
+  },
+
+  set statisticsNotSure(value) {
+     localStorage.setItem(localStorageKeys.statistics.notSure, value.toString());
+  },
+
+  get statisticsUnknown() {
+    return localStorage.getItem(localStorageKeys.statistics.unknown);
+  },
+  set statisticsUnknown(value) {
+    return localStorage.setItem(localStorageKeys.statistics.unknown, value.toString());
+  },
+
+  get currentState() {
+    return localStorage.getItem(localStorageKeys.currentState);
+  },
+  set currentState(value) {
+    return localStorage.setItem(localStorageKeys.currentState, value.toString());
+  },
+  increaseCounter: function(counterName) {
+    newScore = 1;
+    if (localStorage.getItem(counterName)) {
+      newScore = parseInt(localStorage.getItem(counterName), 10) + 1;
+    }
+    localStorage.setItem(counterName, newScore.toString());
+  },
+  get wordFromPrimaryLanguage() {
+    return localStorage.getItem(localStorageKeys.currentWordPrimaryLanguage);
+  },
+  set wordFromPrimaryLanguage(value) {
+    return localStorage.setItem(localStorageKeys.currentWordPrimaryLanguage, value);
+  },
+  get wordFromSecondaryLanguage() {
+    return localStorage.getItem(localStorageKeys.currentWordSecondaryLanguage);
+  },
+  set wordFromSecondaryLanguage(value) {
+    return localStorage.setItem(localStorageKeys.currentWordSecondaryLanguage, value);
+  },
+};
 
 // TODO
 // It's just a single step to create your own wrapper around localStorage with functions like getStatisticsKnown,
@@ -30,54 +83,49 @@ var state = {
 // If you want to be future-proof, make the API async (with callbacks) :)
 
 function startNewGame() {
-  localStorage.setItem(localStorageKeys.statistics.known, "0")
-  localStorage.setItem(localStorageKeys.statistics.notSure, "0")
-  localStorage.setItem(localStorageKeys.statistics.unknown, "0")
+  Storage.statisticsKnown = 0
+  Storage.statisticsNotSure = 0
+  Storage.statisticsUnknown = 0
+
   showWord();
 }
 
 function showWord() {
-      localStorage.setItem(localStorageKeys.currentState, state.showingWord);
-      pickItemFromDictionary()
-      $("#myFrame").html("<h1>" + localStorage.getItem("current_word_hun") +"</h1>")
-      $("#startGame, #myResult, #myResult, #feedback, #restartOrContinue").hide();
-      $("#show, #myFrame, #myStats").show();
+  Storage.currentState = state.showingWord;
+  pickItemFromDictionary();
+  $("#myFrame").html("<h1>" + Storage.wordFromPrimaryLanguage +"</h1>");
+  $("#startGame, #myResult, #myResult, #feedback, #restartOrContinue").hide();
+  $("#show, #myFrame, #myStats").show();
 }
 
 function showMeaning() {
-      localStorage.setItem(localStorageKeys.currentState, state.showingMeaning);
-      $("#myFrame").html("<h1>" + localStorage.getItem("current_word_en") +"</h1>")
-      $("#feedback, #myFrame").show();
-      $("#show").hide();
+  Storage.currentState = state.showingMeaning;
+  $("#myFrame").html("<h1>" + Storage.wordFromSecondaryLanguage +"</h1>");
+  $("#feedback, #myFrame").show();
+  $("#show").hide();
 }
 
 function showResult() {
-    localStorage.setItem(localStorageKeys.currentState, state.showingResult);
-    $("#myFrame, #feedback, #show, #myStats, #startGame").hide();
+  Storage.currentState = state.showingResult;
+  $("#myFrame, #feedback, #show, #myStats, #startGame").hide();
 
-    htmlSrc = '<ul class="list-group">' +
-  '<li class="list-group-item list-group-item-success"><span class="badge">' + localStorage.getItem(localStorageKeys.statistics.known) +'</span> You knew</li>' +
-  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ localStorage.getItem(localStorageKeys.statistics.notSure) +'</span> You were not sure</li> '+
-  '<li class="list-group-item list-group-item-danger"><span class="badge">' + localStorage.getItem(localStorageKeys.statistics.unknown) +'</span> You didn\'t know </li> ' +
+  htmlSrc = '<ul class="list-group">' +
+  '<li class="list-group-item list-group-item-success"><span class="badge">' + Storage.statisticsKnown +'</span> You knew</li>' +
+  '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ Storage.statisticsNotSure +'</span> You were not sure</li> '+
+  '<li class="list-group-item list-group-item-danger"><span class="badge">' + Storage.statisticsUnknown +'</span> You didn\'t know </li> ' +
 '</ul>'
-    $("#myResult").html(htmlSrc);
-    $("#myResult, #restartOrContinue").show();
+  $("#myResult").html(htmlSrc);
+  $("#myResult, #restartOrContinue").show();
 }
 
 function pickItemFromDictionary() {
   id = Math.floor((Math.random() * myDict.length));
-  localStorage.setItem("current_word_hun", myDict[id].hun)
-  localStorage.setItem("current_word_en", myDict[id].en)
+  Storage.wordFromPrimaryLanguage = myDict[id].hun;
+  Storage.wordFromSecondaryLanguage = myDict[id].en;
 }
 
 
-function increaseCounter(counterName) {
-  newScore = 1;
-  if (localStorage.getItem(counterName)) {
-    newScore = parseInt(localStorage.getItem(counterName), 10) + 1
-  }
-  localStorage.setItem(counterName, newScore.toString())
-}
+
 
 
 var handlers = {};
@@ -88,15 +136,15 @@ handlers[state.showingResult] = showResult;
 
 
 $(document).ready(function(){
-  if (localStorage.getItem(localStorageKeys.currentState)) {
+  if (Storage.currentState) {
     $.get("data/hun-en.json", function(data, status) {
       myDict = data;
-      console.log("status is " + localStorage.getItem(localStorageKeys.currentState));
-      handlers[localStorage.getItem(localStorageKeys.currentState)];
+      console.log("status is " + Storage.currentState);
+      handlers[Storage.currentState];
     });
   } else {
     console.log("status was nil.")
-    localStorage.setItem(localStorageKeys.currentState, state.initial)
+    Storage.currentState = state.initial
   }
 
   $("#startGame").click(function(){
@@ -108,7 +156,7 @@ $(document).ready(function(){
 
   $("#show").click(showMeaning);
 
-  var showWordAndUpdateStats = _.compose(showWord, increaseCounter)
+  var showWordAndUpdateStats = _.compose(showWord, Storage.increaseCounter)
 
   $("#iKnow").click(function(){
     showWordAndUpdateStats(localStorageKeys.statistics.known);
@@ -141,26 +189,26 @@ $(document).ready(function(){
   });
 
   jQuery(document).bind('keydown', 'w', function() {
-    if (localStorage.getItem(localStorageKeys.currentState) == state.showingWord) {
+    if (Storage.currentState == state.showingWord) {
       showMeaning()
     }
   });
 
 
   jQuery(document).bind('keydown', 'a', function() {
-    if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
+    if (Storage.currentState == state.showingMeaning) {
       showWordAndUpdateStats(localStorageKeys.statistics.known)
     }
   });
 
   jQuery(document).bind('keydown', 's', function() {
-    if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
+    if (Storage.currentState == state.showingMeaning) {
       showWordAndUpdateStats(localStorageKeys.statistics.notSure)
     }
   });
 
   jQuery(document).bind('keydown', 'd', function() {
-    if (localStorage.getItem(localStorageKeys.currentState) == state.showingMeaning) {
+    if (Storage.currentState == state.showingMeaning) {
       showWordAndUpdateStats(localStorageKeys.statistics.unknown)
     }
   });
@@ -168,12 +216,10 @@ $(document).ready(function(){
   jQuery(document).bind('keydown', 'r', showResult);
 
   jQuery(document).bind('keydown', 'b', function() {
-    if (localStorage.getItem(localStorageKeys.currentState) == state.showingResult) {
+    if (Storage.currentState == state.showingResult) {
        showWord();
     }
   });
 
-  jQuery(document).bind('keydown', 'n', function(e) {
-    startNewGame();
-  });
+  jQuery(document).bind('keydown', 'n', startNewGame);
  });
