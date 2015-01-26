@@ -6,7 +6,7 @@ var myDict = {};
 // 2: giving feedback
 // 3: showing result, game is pending
 
-/*global alert: false, confirm: false, console: true, Debug: false, opera: false, prompt: false, WSH: false, "_":true */
+/*global alert: false, confirm: false, console: false, Debug: false, opera: false, prompt: false, WSH: false, "_":true */
 
 (function() {
     "use strict";
@@ -26,8 +26,7 @@ var myDict = {};
     var state = {
         initial : "initial_state",
         showingWord : "show_word_state",
-        showingMeaning : "show_meaning_state",
-        showingResult : "show_result_state"
+        showingMeaning : "show_meaning_state"
     };
 
     var Storage = {
@@ -80,11 +79,6 @@ var myDict = {};
         }
     };
 
-// TODO
-// It's just a single step to create your own wrapper around localStorage with functions like getStatisticsKnown,
-// leading to a nice architecture where you can easily pass in your mock storage implementation during tests later
-// (or your newer better storage implementation that uses a backend service for storing data).
-// If you want to be future-proof, make the API async (with callbacks) :)
 
     function startNewGame() {
         Storage.statisticsKnown = 0;
@@ -98,8 +92,8 @@ var myDict = {};
         Storage.currentState = state.showingWord;
         pickItemFromDictionary();
         $("#myFrame").html("<h1>" + Storage.wordFromPrimaryLanguage +"</h1>");
-        $("#startGame, #myResult, #feedback, #restartOrContinue").hide();
-        $("#show, #myFrame, #myStats").show();
+        $("#startGame, #feedback").hide();
+        $("#show, #myFrame").show();
     }
 
     function showMeaning() {
@@ -110,9 +104,6 @@ var myDict = {};
     }
 
     function showResult() {
-        Storage.currentState = state.showingResult;
-        $("#myFrame, #feedback, #show, #myStats, #startGame, #shortcutCheatsheet" ).hide();
-
         var htmlSrc = '<ul class="list-group">' +
             '<li class="list-group-item list-group-item-success"><span class="badge">' + Storage.statisticsKnown +'</span> You knew</li>' +
             '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ Storage.statisticsNotSure +'</span> You were not sure</li> '+
@@ -132,7 +123,6 @@ var myDict = {};
     handlers[state.initial] = function(){};
     handlers[state.showingWord] = showWord;
     handlers[state.showingMeaning] = showMeaning;
-    handlers[state.showingResult] = showResult;
 
 
     $(document).ready(function(){
@@ -170,26 +160,11 @@ var myDict = {};
             showWordAndUpdateStats(localStorageKeys.statistics.unknown);
         });
 
-        // $("#myStats").click(showResult);
-
         $("#restart").click(startNewGame);
 
         $("#backToGame").click(showWord);
 
-        $('#myTab').find('#game').click(function (e) {
-            e.preventDefault();
-            console.log("game tab clicked");
-            $(this).tab('show');
-        });
-
-        $('#myTab #cheatsheet').click(function (e) {
-            e.preventDefault();
-            console.log("cheatsheet tab clicked");
-            $(this).tab('show');
-        });
-
-        $('#myTab #results').click(function (e) {
-            e.preventDefault();
+        $('#myTab').find('#results').click(function () {
             console.log("result tab clicked");
             showResult();
             $(this).tab('show');
@@ -217,14 +192,6 @@ var myDict = {};
         jQuery(document).bind('keydown', 'd', function() {
             if (Storage.currentState === state.showingMeaning) {
                 showWordAndUpdateStats(localStorageKeys.statistics.unknown);
-            }
-        });
-
-        // jQuery(document).bind('keydown', 'r', showResult);
-
-        jQuery(document).bind('keydown', 'b', function() {
-            if (Storage.currentState === state.showingResult) {
-                showWord();
             }
         });
 
