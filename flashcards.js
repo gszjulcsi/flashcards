@@ -5,6 +5,9 @@ var myDict = {};
 // 1: showing a card
 // 2: giving feedback
 // 3: showing result, game is pending
+
+/*global alert: false, confirm: false, console: true, Debug: false, opera: false, prompt: false, WSH: false, "_":true */
+
 (function() {
     "use strict";
     var localStorageKeys = {
@@ -84,9 +87,9 @@ var myDict = {};
 // If you want to be future-proof, make the API async (with callbacks) :)
 
     function startNewGame() {
-        Storage.statisticsKnown = 0
-        Storage.statisticsNotSure = 0
-        Storage.statisticsUnknown = 0
+        Storage.statisticsKnown = 0;
+        Storage.statisticsNotSure = 0;
+        Storage.statisticsUnknown = 0;
 
         showWord();
     }
@@ -137,11 +140,11 @@ var myDict = {};
             $.get("data/hun-en.json", function(data, status) {
                 myDict = data;
                 console.log("status is " + Storage.currentState);
-                handlers[Storage.currentState];
+                handlers[Storage.currentState]();
             });
         } else {
-            console.log("status was nil.")
-            Storage.currentState = state.initial
+            console.log("status was nil.");
+            Storage.currentState = state.initial;
         }
 
         $("#startGame").click(function(){
@@ -153,18 +156,18 @@ var myDict = {};
 
         $("#show").click(showMeaning);
 
-        var showWordAndUpdateStats = _.compose(showWord, Storage.increaseCounter)
+        var showWordAndUpdateStats = _.compose(showWord, Storage.increaseCounter);
 
         $("#iKnow").click(function(){
             showWordAndUpdateStats(localStorageKeys.statistics.known);
         });
 
         $("#almostKnow").click(function(){
-            showWordAndUpdateStats(localStorageKeys.statistics.notSure)
+            showWordAndUpdateStats(localStorageKeys.statistics.notSure);
         });
 
         $("#dontKnow").click(function(){
-            showWordAndUpdateStats(localStorageKeys.statistics.unknown)
+            showWordAndUpdateStats(localStorageKeys.statistics.unknown);
         });
 
         // $("#myStats").click(showResult);
@@ -174,53 +177,53 @@ var myDict = {};
         $("#backToGame").click(showWord);
 
         $('#myTab').find('#game').click(function (e) {
-            e.preventDefault()
-            console.log("game tab clicked")
-            $(this).tab('show')
+            e.preventDefault();
+            console.log("game tab clicked");
+            $(this).tab('show');
         });
 
         $('#myTab #cheatsheet').click(function (e) {
-            e.preventDefault()
-            console.log("cheatsheet tab clicked")
-            $(this).tab('show')
+            e.preventDefault();
+            console.log("cheatsheet tab clicked");
+            $(this).tab('show');
         });
 
         $('#myTab #results').click(function (e) {
-            e.preventDefault()
-            console.log("result tab clicked")
+            e.preventDefault();
+            console.log("result tab clicked");
             showResult();
-            $(this).tab('show')
+            $(this).tab('show');
         });
 
         jQuery(document).bind('keydown', 'w', function() {
-            if (Storage.currentState == state.showingWord) {
-                showMeaning()
+            if (Storage.currentState === state.showingWord) {
+                showMeaning();
             }
         });
 
 
         jQuery(document).bind('keydown', 'a', function() {
-            if (Storage.currentState == state.showingMeaning) {
-                showWordAndUpdateStats(localStorageKeys.statistics.known)
+            if (Storage.currentState === state.showingMeaning) {
+                showWordAndUpdateStats(localStorageKeys.statistics.known);
             }
         });
 
         jQuery(document).bind('keydown', 's', function() {
-            if (Storage.currentState == state.showingMeaning) {
-                showWordAndUpdateStats(localStorageKeys.statistics.notSure)
+            if (Storage.currentState === state.showingMeaning) {
+                showWordAndUpdateStats(localStorageKeys.statistics.notSure);
             }
         });
 
         jQuery(document).bind('keydown', 'd', function() {
-            if (Storage.currentState == state.showingMeaning) {
-                showWordAndUpdateStats(localStorageKeys.statistics.unknown)
+            if (Storage.currentState === state.showingMeaning) {
+                showWordAndUpdateStats(localStorageKeys.statistics.unknown);
             }
         });
 
         // jQuery(document).bind('keydown', 'r', showResult);
 
         jQuery(document).bind('keydown', 'b', function() {
-            if (Storage.currentState == state.showingResult) {
+            if (Storage.currentState === state.showingResult) {
                 showWord();
             }
         });
