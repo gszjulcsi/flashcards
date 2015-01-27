@@ -166,11 +166,7 @@ var myDict = {};
 
         $("#backToGame").click(showWord);
 
-        $('#myTab').find('#results').click(function () {
-            console.log("result tab clicked");
-            showResult();
-            $(this).tab('show');
-        });
+        $('a[href="#results"]').click(showResult);
 
         jQuery(document).bind('keydown', 'w', function() {
             if (Storage.currentState === state.showingWord) {
