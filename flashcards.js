@@ -126,10 +126,12 @@ var myDict = {};
 
 
     $(document).ready(function(){
+
         if (Storage.currentState) {
             $.get("data/hun-en.json", function(data, status) {
                 myDict = data;
                 console.log("status is " + Storage.currentState);
+
                 handlers[Storage.currentState]();
             });
         } else {

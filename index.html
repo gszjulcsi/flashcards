@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="hu">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,18 +7,23 @@
 
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="flashcards.js"> </script>
     <script src="jquery.hotkeys.js"> </script>
     <script src="lodash.js"></script>
+    <script src="jquery.i18n.js"></script>
+    <script src="jquery.i18n.messagestore.js"></script>
+    <script src="jquery.i18n.fallbacks.js"></script>
+    <script src="jquery.i18n.parser.js"></script>
+    <script src="jquery.i18n.emitter.js"></script>
+    <script src="jquery.i18n.language.js"></script>
 </head>
 
 <body>
 <!-- Nav tabs -->
 <div class="container">
-    <div class="page-header">
-        <h1>Julcsi's amazing flashcard game</h1>
+    <div class="page-header" data-i18n="header-text">
     </div>
     <ul class="nav nav-tabs" role="tablist" id="myTab">
         <li class="nav active"><a href="#game" data-toggle="tab">Game</a></li>
