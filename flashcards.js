@@ -126,7 +126,9 @@ var myDict = {};
 
 
     $(document).ready(function(){
-
+        $.i18n().load({
+            'header-text': 'Julcsi fergeteges tanulókártyái'
+        }, 'hu');
         if (Storage.currentState) {
             $.get("data/hun-en.json", function(data, status) {
                 myDict = data;
@@ -138,7 +140,7 @@ var myDict = {};
             console.log("status was nil.");
             Storage.currentState = state.initial;
         }
-
+        $(".page-header").html('<h1>' + $.i18n( 'header-text' ) + '</h1>');
         $("#startGame").click(function(){
             $.get("data/hun-en.json", function(data, status) {
                 myDict = data;
