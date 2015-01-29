@@ -104,12 +104,10 @@ var myDict = {};
     }
 
     function showResult() {
-        var htmlSrc = '<ul class="list-group">' +
-            '<li class="list-group-item list-group-item-success"><span class="badge">' + Storage.statisticsKnown +'</span> You knew</li>' +
-            '<li class="list-group-item list-group-item-warning"><span class="badge"> '+ Storage.statisticsNotSure +'</span> You were not sure</li> '+
-            '<li class="list-group-item list-group-item-danger"><span class="badge">' + Storage.statisticsUnknown +'</span> You didn\'t know </li> ' +
-            '</ul>';
-        $("#myResult").html(htmlSrc);
+        $("#statsKnown").text(Storage.statisticsKnown);
+        $("#statsNotSure").text(Storage.statisticsNotSure);
+        $("#statsUnknown").text(Storage.statisticsUnknown);
+
         $("#myResult, #restartOrContinue").show();
     }
 
@@ -125,10 +123,45 @@ var myDict = {};
     handlers[state.showingMeaning] = showMeaning;
 
 
+    function loadBundles(lang) {
+        $.i18n.properties({
+            name: 'Messages',
+            path: 'bundle/',
+            mode: 'both',
+            language: lang,
+            callback: function() {
+                $("#header-text").text(header_text);
+                $("#game_tab").text(game_tab_title);
+                $("#results_tab").text(results_tab_title);
+                $("#cheatsheet_tab").text(cheatsheet_tab_title);
+                $("#iKnow").text(i_know_button);
+                $("#almostKnow").text(not_sure_button);
+                $("#dontKnow").text(did_not_know_button);
+                $("#show").text(show_meaning_button);
+                $("#restart").text(restart_button);
+                $("#newGameShortcut").text(new_game_shortcut_text);
+                $("#showMeaningShortcut").text(new_game_shortcut_text);
+                $("#iKnewShortcut").text(i_knew_shortcut_text);
+                $("#almostKnewShortcut").text(almost_knew_shortcut_text);
+                $("#didNotKnowShortcut").text(did_not_know_shortcut_text);
+                $("#knownInTable").text(i_know_result_table);
+                $("#notSureInTable").text(not_sure_result_table);
+                $("#unknownInTable").text(did_not_know_result_table);
+                $("#languageMenu").text(language_menu);
+            }
+        });}
+
     $(document).ready(function(){
-        $.i18n().load({
-            'header-text': 'Julcsi fergeteges tanulókártyái'
-        }, 'hu');
+        var lng = $.i18n.browserLang();//"hu";
+        loadBundles(lng);
+
+        // configure language combo box
+        $('#lang').change(function() {
+            var selection = $('#lang option:selected').val();
+            loadBundles(selection !== 'browser' ? selection : $.i18n.browserLang());
+
+        });
+
         if (Storage.currentState) {
             $.get("data/hun-en.json", function(data, status) {
                 myDict = data;
@@ -140,7 +173,6 @@ var myDict = {};
             console.log("status was nil.");
             Storage.currentState = state.initial;
         }
-        $(".page-header").html('<h1>' + $.i18n( 'header-text' ) + '</h1>');
         $("#startGame").click(function(){
             $.get("data/hun-en.json", function(data, status) {
                 myDict = data;
@@ -149,6 +181,8 @@ var myDict = {};
         });
 
         $("#show").click(showMeaning);
+
+        $("")
 
         var showWordAndUpdateStats = _.compose(showWord, Storage.increaseCounter);
 

@@ -12,23 +12,36 @@
     <script src="flashcards.js"> </script>
     <script src="jquery.hotkeys.js"> </script>
     <script src="lodash.js"></script>
-    <script src="jquery.i18n.js"></script>
-    <script src="jquery.i18n.messagestore.js"></script>
-    <script src="jquery.i18n.fallbacks.js"></script>
-    <script src="jquery.i18n.parser.js"></script>
-    <script src="jquery.i18n.emitter.js"></script>
-    <script src="jquery.i18n.language.js"></script>
+    <script type="text/javascript" src="jquery.i18n.properties-min-1.0.9.js"></script>
+
 </head>
 
 <body>
 <!-- Nav tabs -->
 <div class="container">
-    <div class="page-header" data-i18n="header-text">
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="page-header">
+                <h1><div id="header-text"></div></h1>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <!--<div class="dropdown">-->
+                <!--<button class="btn btn-default dropdown-toggle" type="button" id="langButton" data-toggle="dropdown" aria-expanded="true">-->
+                    <!--Select Language-->
+                    <!--<span class="caret"></span>-->
+                <!--</button>-->
+                <!--<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="lang">-->
+                    <!--<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Magyar/Hungarian</a></li>-->
+                    <!--<li role="presentation"><a role="menuitem" tabindex="-1" href="#">English/Angol</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
     </div>
     <ul class="nav nav-tabs" role="tablist" id="myTab">
-        <li class="nav active"><a href="#game" data-toggle="tab">Game</a></li>
-        <li role="nav"><a href="#results" data-toggle="tab">Result</a></li>
-        <li role="nav"><a href="#cheatsheet" data-toggle="tab">Keyboard shortcuts</a></li>
+        <li class="nav active"><a href="#game" data-toggle="tab" id="game_tab">Game</a></li>
+        <li role="nav"><a href="#results" data-toggle="tab" id="results_tab">Result</a></li>
+        <li role="nav"><a href="#cheatsheet" data-toggle="tab" id="cheatsheet_tab">Keyboard shortcuts</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -85,7 +98,14 @@
             <div class = "row">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-6">
-                    <p id = "myResult" class="bg-info"></p>
+                    <p id = "myResult" class="bg-info">
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-success"><span class="badge" id="statsKnown"> </span> <div id="knownInTable"> You knew</div></li>
+                        <li class="list-group-item list-group-item-warning"><span class="badge" id="statsNotSure"></span> <div id="notSureInTable">You were not sure</div></li>
+                        <li class="list-group-item list-group-item-danger"><span class="badge" id="statsUnknown"></span> <div id="unknownInTable">You didn't know </div></li>
+                    </ul>
+
+                    </p>
                 </div>
                 <div class="col-sm-3"></div>
             </div>
@@ -105,35 +125,23 @@
                     <ul class="list-group" id = "shortcutCheatsheet">
                         <li class="list-group-item">
                             <span class="badge">n</span>
-                            New game
+                            <div id="newGameShortcut">New game</div>
                         </li>
                         <li class="list-group-item">
                             <span class="badge">w</span>
-                            Show the meaning of the word
+                            <div id="showMeaningShortcut">Show the meaning of the word</div>
                         </li>
                         <li class="list-group-item">
                             <span class="badge">a</span>
-                            I knew this word
+                            <div id="iKnewShortcut">I knew this word</div>
                         </li>
                         <li class="list-group-item">
                             <span class="badge">s</span>
-                            I was not 100% sure about the word
+                            <div id="almostKnewShortcut">I was not 100% sure about the word</div>
                         </li>
                         <li class="list-group-item">
                             <span class="badge">d</span>
-                            I didn't know the word
-                        </li>
-                        <li class="list-group-item">
-                            <span class="badge">b</span>
-                            Back to game
-                        </li>
-                        <li class="list-group-item">
-                            <span class="badge">r</span>
-                            Show my results
-                        </li>
-                        <li class="list-group-item">
-                            <span class="badge">b</span>
-                            Back to game from the result view
+                            <div id="didNotKnowShortcut">I didn't know the word</div>
                         </li>
                     </ul>
                 </div>
